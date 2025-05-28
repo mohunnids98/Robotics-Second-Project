@@ -1,0 +1,8 @@
+<launch>
+    <!--Nodes-->
+    <node pkg="second_project" type="odom_to_tf" name= "odom_to_tf" output="screen">
+
+
+    <!-- Start RViz with preloaded configuration -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find second_project)/rviz/robot_navigation.rviz"/>
+</launch>
