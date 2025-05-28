@@ -1,3 +1,4 @@
 # Ignore build and devel folders
 build/
 devel/
+data/robotics2.bag
