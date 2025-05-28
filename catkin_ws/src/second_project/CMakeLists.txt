@@ -8,9 +8,7 @@ include_directories(${EIGEN3_INCLUDE_DIR})
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   nav_msgs
-  geometry_msgs
   tf
-  sensor_msgs
   # dynamic_reconfigure
   # message_filters
   # message_generation
@@ -43,14 +41,14 @@ catkin_package(
 include_directories(include ${catkin_INCLUDE_DIRS}
 )
 
-# #Add executable for each node
-# add_executable(odometer src/odom_pub_sub.cpp src/Kalman_filter.cpp)
-# add_dependencies(odometer ${PROJECT_NAME}_gencfg)
+#Add executable for each node
+add_executable(odom_to_tf src/odom_tf.cpp)
+# add_dependencies(odom_to_tf ${PROJECT_NAME}_gencfg)
 
-# #Link the executables with the required libraries
-# target_link_libraries(odometer
-#  ${catkin_LIBRARIES}
-# )
+#Link the executables with the required libraries
+target_link_libraries(odom_to_tf
+ ${catkin_LIBRARIES}
+)
 
 # add_executable(gps_odometer src/gps_pub_sub.cpp)
 # add_dependencies(gps_odometer ${PROJECT_NAME}_gencfg)
