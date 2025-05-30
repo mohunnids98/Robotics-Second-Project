@@ -8,6 +8,7 @@ include_directories(${EIGEN3_INCLUDE_DIR})
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   nav_msgs
+  sensor_msgs
   tf
   # dynamic_reconfigure
   # message_filters
