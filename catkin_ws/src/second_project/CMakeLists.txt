@@ -4,6 +4,10 @@ project(second_project)
 find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 
+# find_package(vector REQUIRED)
+# include_directories(${VECTOR_INCLUDE_DIR})
+
+
 # Find required packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
@@ -11,8 +15,8 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   tf
   # dynamic_reconfigure
-  # message_filters
-  # message_generation
+  message_filters
+  message_generation
   std_msgs
 )
 
@@ -49,6 +53,13 @@ add_executable(odom_to_tf src/odom_tf.cpp)
 #Link the executables with the required libraries
 target_link_libraries(odom_to_tf
  ${catkin_LIBRARIES}
+)
+
+add_executable(laser_merge src/laser_merge.cpp)
+
+#link the execuatables with the required libraries
+target_link_libraries(laser_merge
+  ${catkin_LIBRARIES}
 )
 
 # add_executable(gps_odometer src/gps_pub_sub.cpp)
