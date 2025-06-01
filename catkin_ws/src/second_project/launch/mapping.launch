@@ -1,8 +1,37 @@
 <launch>
-    <!--Nodes-->
-    <node pkg="second_project" type="odom_to_tf" name= "odom_to_tf" output="screen">
+    <!-- Parameters -->
+    <param name="use_sim_time" value="true"/>
 
+    <!-- IRA Laser Scan Merger -->
+    <node name="laser_merger" pkg="ira_laser_tools" type="laserscan_multi_merger" output="screen">
+        <rosparam>
+            destination_frame: base_link
+            scan_destination_topic: /merged_scan
+            laser_scans:
+              - /filtered_front_scan
+              - /filtered_back_scan
+        </rosparam>
+    </node>
 
-    <!-- Start RViz with preloaded configuration -->
+    <!-- GMapping Node -->
+    <node  pkg="gmapping" type="slam_gmapping" name="gmapping" output="screen">
+        <param name="base_frame" value="base_link"/>
+        <param name="odom_frame" value="odom"/>
+        <param name="map_frame" value="map"/>
+        <param name="maxUrange" value="10.0"/>
+        <param name="maxRange" value="12.0"/>
+        <param name="linearUpdate" value="0.5"/>
+        <param name="angularUpdate" value="0.436"/>
+        <param name="temporalUpdate" value="1.0"/>
+        <param name="map_update_interval" value="5.0"/>
+        <param name="delta" value="0.1"/>
+        <remap from="scan" to="/merged_scan"/>
+    </node>
+
+    <!-- Custom Nodes -->
+    <node pkg="second_project" type="odom_to_tf" name="odom_to_tf" output="screen"/>
+    <node pkg="second_project" type="laser_merge" name="laser_merge" output="screen"/>
+
+    <!-- RViz -->
     <node pkg="rviz" type="rviz" name="rviz" args="-d $(find second_project)/rviz/robot_navigation.rviz"/>
 </launch>

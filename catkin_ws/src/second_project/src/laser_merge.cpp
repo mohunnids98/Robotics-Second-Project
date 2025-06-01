@@ -130,8 +130,8 @@ class LaserMerge {
 
 
             // Publish the merged scan
-            filtered_front_pub_ .publish(front_scan_msg_);
-            filtered_back_pub_ .publish(back_scan_msg_);
+            filtered_front_pub_.publish(front_scan_msg_);
+            filtered_back_pub_.publish(back_scan_msg_);
         };
 
 };
