@@ -30,7 +30,7 @@ class OdomToTF {
         //Constructor
         OdomToTF() {
             //Construct the subscriber to listen to the /odom topic
-            odom_sub_ = nh_.subscribe("/odom", 1000, &OdomToTF::odomCallback, this);
+            odom_sub_ = nh_.subscribe("/odometry", 1000, &OdomToTF::odomCallback, this);
         }
 
         //Callback to /odom topic
@@ -47,7 +47,7 @@ class OdomToTF {
             z_ = odomMsg_.pose.pose.position.z;
             //roll_ = odomMsg_.pose.pose.orientation.x;
             //pitch_ = odomMsg_.pose.pose.orientation.y;
-            yaw_ = odomMsg_.pose.pose.orientation.z;
+            yaw_ = odomMsg_.pose.pose.orientation.w;
 
             //Set the transform origin
             transform_.setOrigin(tf::Vector3(x_, y_, z_));

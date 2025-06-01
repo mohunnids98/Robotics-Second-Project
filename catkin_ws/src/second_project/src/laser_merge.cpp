@@ -43,15 +43,15 @@ class LaserMerge {
         double range_min = 0.0;
         double range_max = 100.0;
     
-        // Create transform broadcaster for front laser
-        tf::TransformBroadcaster front_tf_;
-        tf::Transform front_transform_;
-        tf::Quaternion front_q_;
+        // // Create transform broadcaster for front laser
+        // tf::TransformBroadcaster front_tf_;
+        // tf::Transform front_transform_;
+        // tf::Quaternion front_q_;
 
-        // Create transform broadcaster for back laser
-        tf::TransformBroadcaster back_tf_;
-        tf::Transform back_transform_;
-        tf::Quaternion back_q_;
+        // // Create transform broadcaster for back laser
+        // tf::TransformBroadcaster back_tf_;
+        // tf::Transform back_transform_;
+        // tf::Quaternion back_q_;
 
 
         // Create float 32 array store filtered scan data
@@ -73,22 +73,26 @@ class LaserMerge {
             // Register the callback function
             sync_.registerCallback(boost::bind(&LaserMerge::ScanCallback, this, _1, _2));
 
-            // Broadcast front laser transformation
-            front_transform_.setOrigin(tf::Vector3(x, y, z));
-            front_q_.setRPY(0, 0, 0); // Assuming no rotation for the front laser
-            front_transform_.setRotation(front_q_);
-            front_tf_.sendTransform(tf::StampedTransform(front_transform_, ros::Time::now(), "base_link", "sick_front"));
-            // Broadcast back laser transformation 
-            back_transform_.setOrigin(tf::Vector3(-x, y, z)); // Assuming back laser is at -x position
-            back_q_.setRPY(0, 0, M_PI); // Assuming 180-degree rotation for the back laser
-            back_transform_.setRotation(back_q_);
-            back_tf_.sendTransform(tf::StampedTransform(back_transform_, ros::Time::now(), "base_link", "sick_back"));
+            // // Broadcast front laser transformation
+            // front_transform_.setOrigin(tf::Vector3(x, y, z));
+            // front_q_.setRPY(0, 0, 0); // Assuming no rotation for the front laser
+            // front_transform_.setRotation(front_q_);
+            // front_tf_.sendTransform(tf::StampedTransform(front_transform_, ros::Time::now(), "base_link", "sick_front"));
+            // // Broadcast back laser transformation 
+            // back_transform_.setOrigin(tf::Vector3(-x, y, z)); // Assuming back laser is at -x position
+            // back_q_.setRPY(0, 0, M_PI); // Assuming 180-degree rotation for the back laser
+            // back_transform_.setRotation(back_q_);
+            // back_tf_.sendTransform(tf::StampedTransform(back_transform_, ros::Time::now(), "base_link", "sick_back"));
         };
         // Callback function to merge the scans
         void ScanCallback(const sensor_msgs::LaserScan::ConstPtr& front_msg,const sensor_msgs::LaserScan::ConstPtr& back_msg) {
             // Store the incoming scans
             front_scan_ = *front_msg;
             back_scan_ = *back_msg;
+
+            //Clear the filtered scan data vectors
+            filtered_front_.clear();
+            filtered_back_.clear();
 
             //Extract the ranges from the scans
             front_scan_data_ = front_scan_.ranges;
@@ -118,7 +122,7 @@ class LaserMerge {
 
             // Prepare back scan message 
             back_scan_msg_.header.stamp = ros::Time::now();
-            back_scan_msg_.header.frame_id = "sick_front";
+            back_scan_msg_.header.frame_id = "sick_back";
             back_scan_msg_.angle_min = -1.8966370895504951; // Adjusted angle min for back scan, taken from python code
             back_scan_msg_.angle_max = 1.8961658105254173;
             back_scan_msg_.angle_increment = angle_increment;

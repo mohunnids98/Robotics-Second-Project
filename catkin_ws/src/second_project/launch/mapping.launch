@@ -2,17 +2,18 @@
     <!-- Parameters -->
     <param name="use_sim_time" value="true"/>
 
+    <!-- Adjust z to match your node's expected height -->
+    <node pkg="tf" type="static_transform_publisher" name="sick_front_tf"
+      args="0.3 0 -0.115 0 0 0 base_link sick_front 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="sick_back_tf"
+      args="-0.3 0 -0.115 0 0 3.14159 base_link sick_back 100"/>
+
     <!-- IRA Laser Scan Merger -->
     <node name="laser_merger" pkg="ira_laser_tools" type="laserscan_multi_merger" output="screen">
-        <rosparam>
-            destination_frame: base_link
-            scan_destination_topic: /merged_scan
-            laser_scans:
-              - /filtered_front_scan
-              - /filtered_back_scan
-        </rosparam>
+      <param name="destination_frame" value="base_link"/>
+      <param name="scan_destination_topic" value="/merged_scan"/>
+      <param name="laserscan_topics" value="/filtered_front_scan /filtered_back_scan" />
     </node>
-
     <!-- GMapping Node -->
     <node  pkg="gmapping" type="slam_gmapping" name="gmapping" output="screen">
         <param name="base_frame" value="base_link"/>
@@ -25,7 +26,7 @@
         <param name="temporalUpdate" value="1.0"/>
         <param name="map_update_interval" value="5.0"/>
         <param name="delta" value="0.1"/>
-        <remap from="scan" to="/merged_scan"/>
+        <remap from="scan" to="merged_scan"/>
     </node>
 
     <!-- Custom Nodes -->
