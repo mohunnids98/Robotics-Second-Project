@@ -7,9 +7,9 @@ echo "Launching second_project..."
 # # Give everything a moment to spin up
 sleep 5
 
-# Start rosbag recording
-# rosbag record -O ../data/my_drive.bag /odom /gps_odom /tf /ekf &
-# echo "Recording started..."
+Start rosbag recording
+rosbag record -O ../data/project.bag /merged_scan /filtered_front_scan /filtered_back_scan /tf /map &
+echo "Recording started..."
 
 # sleep 2
 

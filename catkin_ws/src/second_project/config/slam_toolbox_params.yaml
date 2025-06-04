@@ -1,0 +1,33 @@
+slam_toolbox:
+  ros__parameters:
+    use_sim_time: true
+
+    # General
+    mode: "online_async"
+    resolution: 0.05
+    max_laser_range: 12.0
+    minimum_time_interval: 0.5
+
+    # Scan matching
+    minimum_travel_distance: 0.1
+    minimum_travel_heading: 0.1
+    scan_buffer_size: 10
+    scan_buffer_maximum_scan_distance: 15.0
+    do_loop_closing: true
+    loop_match_min_chain_size: 10
+    loop_match_max_variance: 3.0
+    loop_search_radius: 10.0
+
+    # Map publishing
+    map_update_interval: 2.0
+    transform_publish_period: 0.05
+
+    # Pose graph optimization
+    use_scan_matching: true
+    use_pose_graph: true
+    pose_graph_save_path: ""
+
+    # Optimizer parameters
+    optimization_iterations: 5
+    optimization_threshold: 0.01
+    loop_closure_confidence_threshold: 0.5

@@ -56,7 +56,7 @@ class OdomToTF {
             transform_.setRotation(q_);
             //Broadcast the transform
             br_.sendTransform(tf::StampedTransform(transform_, curr_time_, "odom", "base_link"));
-            ROS_INFO("Broadcasting transform from odom to base_link");
+            //ROS_INFO("Broadcasting transform from odom to base_link");
         }
 };
 

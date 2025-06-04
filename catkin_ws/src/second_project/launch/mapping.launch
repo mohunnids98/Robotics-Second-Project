@@ -7,6 +7,9 @@
       args="0.3 0 -0.115 0 0 0 base_link sick_front 100"/>
     <node pkg="tf" type="static_transform_publisher" name="sick_back_tf"
       args="-0.3 0 -0.115 0 0 3.14159 base_link sick_back 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="base_to_body" 
+      args="0 0 0 0 0 0 base_link body_link 100" />
+
 
     <!-- IRA Laser Scan Merger -->
     <node name="laser_merger" pkg="ira_laser_tools" type="laserscan_multi_merger" output="screen">
@@ -20,14 +23,25 @@
         <param name="odom_frame" value="odom"/>
         <param name="map_frame" value="map"/>
         <param name="maxUrange" value="10.0"/>
-        <param name="maxRange" value="12.0"/>
-        <param name="linearUpdate" value="0.5"/>
+        <param name="maxRange" value="10.0"/>
+        <param name="linearUpdate" value="0.1"/>
         <param name="angularUpdate" value="0.436"/>
-        <param name="temporalUpdate" value="1.0"/>
+        <param name="temporalUpdate" value=".20"/>
         <param name="map_update_interval" value="5.0"/>
+        <param name="minimumScore" value="200" />
+        <param name="resampleThreshold" value="0.5" />
         <param name="delta" value="0.1"/>
         <remap from="scan" to="merged_scan"/>
     </node>
+    <!-- <include file="$(find slam_toolbox)/launch/online_async_launch.xml">
+      <arg name="slam_params_file" value="$find second_project/cfg/slam_toolbox_params.yaml"/>
+    </include> -->
+    <!-- <include file="$(find cartographer_ros)/launch/demo_backpack_2d.launch">
+      <arg name="configuration_directory" value="$(find second_project)/config" />
+      <arg name="configuration_basename" value="cartographer_params.lua" />
+      <remap from="scan" to="merged_scan"/>
+    </include> -->
+
 
     <!-- Custom Nodes -->
     <node pkg="second_project" type="odom_to_tf" name="odom_to_tf" output="screen"/>
