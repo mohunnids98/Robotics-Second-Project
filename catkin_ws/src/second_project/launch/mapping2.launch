@@ -1,0 +1,41 @@
+<launch>
+    <!-- Parameters -->
+    <param name="use_sim_time" value="true"/>
+
+    <!-- Adjust z to match your node's expected height -->
+    <node pkg="tf" type="static_transform_publisher" name="sick_front_tf"
+      args="0.3 0 -0.115 0 0 0 base_link sick_front 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="sick_back_tf"
+      args="-0.3 0 -0.115 0 0 3.14159 base_link sick_back 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="base_to_body" 
+      args="0 0 0 0 0 0 base_link body_link 100" />
+
+
+    <!-- IRA Laser Scan Merger -->
+    <node name="laser_merger" pkg="ira_laser_tools" type="laserscan_multi_merger" output="screen">
+      <param name="destination_frame" value="base_link"/>
+      <param name="scan_destination_topic" value="/merged_scan"/>
+      <param name="angle_min" value="-3.14159"/>
+      <param name="angle_max" value="3.14159"/>
+      <!-- <param name="angle_max" value= "3.13577"/> -->
+      <param name="angle_increment" value="0.005817764173314431"/>
+      <param name="laserscan_topics" value="/filtered_front_scan /filtered_back_scan" />
+    </node>
+
+
+    <!-- slam_toolbox (async mode for online mapping) -->
+    <node pkg="slam_toolbox" type="async_slam_toolbox_node" name="slam_toolbox" output="screen">
+      <rosparam command="load" file="$(find second_project)/config/slam_toolbox_params.yaml" />
+      <param name="debug_logging" value="true"/>  
+      <remap from="scan" to="/merged_scan"/> 
+      <remap from="odom" to="/odom" />  <!-- Your odometry topic -->
+    </node>
+
+
+    <!-- Custom Nodes -->
+    <node pkg="second_project" type="odom_to_tf" name="odom_to_tf" output="screen"/>
+    <node pkg="second_project" type="laser_merge" name="laser_merge" output="screen"/>
+
+    <!-- RViz -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find second_project)/rviz/robot_navigation.rviz"/>
+</launch>

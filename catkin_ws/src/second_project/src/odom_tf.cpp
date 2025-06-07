@@ -13,6 +13,7 @@ class OdomToTF {
         tf::Transform transform_;
         tf::Quaternion q_;
 
+
         //Subscriber for /odom topic from bag
         ros::Subscriber odom_sub_;
 
@@ -24,7 +25,7 @@ class OdomToTF {
 
         //Create variables to store the position and orientation data
         double x_, y_, z_;
-        double roll_, pitch_, yaw_;
+        double qx_, qy_, qz_,qw_;
 
     public:
         //Constructor
@@ -36,6 +37,7 @@ class OdomToTF {
         //Callback to /odom topic
         void odomCallback(const nav_msgs::Odometry::ConstPtr& msg) {
             //Store the message in the class variable
+            ROS_INFO("Received odometry message");
             odomMsg_ = *msg;
 
             //Get the current time
@@ -45,14 +47,17 @@ class OdomToTF {
             x_ = odomMsg_.pose.pose.position.x;
             y_ = odomMsg_.pose.pose.position.y;
             z_ = odomMsg_.pose.pose.position.z;
-            //roll_ = odomMsg_.pose.pose.orientation.x;
-            //pitch_ = odomMsg_.pose.pose.orientation.y;
-            yaw_ = odomMsg_.pose.pose.orientation.w;
+            qx_ = odomMsg_.pose.pose.orientation.x;
+            qy_ = odomMsg_.pose.pose.orientation.y;
+            qz_ = odomMsg_.pose.pose.orientation.z;
+            qw_ = odomMsg_.pose.pose.orientation.w;
+
 
             //Set the transform origin
             transform_.setOrigin(tf::Vector3(x_, y_, z_));
             //Transform to base_link frame
-            q_.setRPY(0,0, yaw_);
+            //q_.setRPY(roll_,pitch_, yaw_);
+            q_.setValue(qx_,qy_,qz_, qw_);
             transform_.setRotation(q_);
             //Broadcast the transform
             br_.sendTransform(tf::StampedTransform(transform_, curr_time_, "odom", "base_link"));
