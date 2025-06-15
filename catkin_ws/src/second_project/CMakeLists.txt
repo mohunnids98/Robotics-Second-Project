@@ -13,10 +13,10 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   nav_msgs
   sensor_msgs
-  tf
+  tf2
+  tf2_ros
   # dynamic_reconfigure
-  message_filters
-  message_generation
+
   std_msgs
 )
 
@@ -55,7 +55,7 @@ target_link_libraries(odom_to_tf
  ${catkin_LIBRARIES}
 )
 
-add_executable(laser_merge src/laser_merge.cpp)
+add_executable(laser_merge src/laser_merge4.cpp)
 
 #link the execuatables with the required libraries
 target_link_libraries(laser_merge
