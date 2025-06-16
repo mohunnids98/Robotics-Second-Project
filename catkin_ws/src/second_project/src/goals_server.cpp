@@ -1,11 +1,13 @@
 #include <ros/ros.h>
-//#include <fstream>
+#include <fstream>
+#include <sstream>
 #include <vector>
+#include <string>
 #include <actionlib/client/simple_action_client.h>
 #include <move_base_msgs/MoveBaseAction.h>
 #include <geometry_msgs/PoseStamped.h>
-//#include <ros/package.h>
-
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
@@ -14,27 +16,21 @@ private:
     std::vector<geometry_msgs::PoseStamped> goals_;
     MoveBaseClient ac_;
     ros::NodeHandle nh_;
-    std::string csv_path_;
 
 public:
-    GoalPublisher(std::string csv_path) : 
-        ac_("move_base", true),
-        csv_path_(csv_path)
-    {
+    GoalPublisher() : ac_("move_base", true) {
         // Wait for the action server to come up
         while(!ac_.waitForServer(ros::Duration(5.0)) && ros::ok()) {
             ROS_INFO("Waiting for move_base action server...");
         }
-        
-        loadGoalsFromCSV(csv_path_);
+        loadGoalsFromCSV();
     }
 
     void loadGoalsFromCSV() {
-            
-        
-        std::ifstream file(full_path.c_str());
+        std::string csv_path = "second_project/csv/goals.csv"; // RELATIVE PATH
+        std::ifstream file(csv_path.c_str());
         if(!file.is_open()) {
-            ROS_ERROR("Failed to open CSV file: %s", full_path.c_str());
+            ROS_ERROR("Failed to open CSV file: %s", csv_path.c_str());
             return;
         }
 
@@ -42,13 +38,12 @@ public:
         while(std::getline(file, line)) {
             std::stringstream ss(line);
             std::string value;
-            std::vector<float> values;
+            std::vector<double> values;
 
             while(std::getline(ss, value, ',')) {
                 try {
-                    values.push_back(std::stof(value));
-                }
-                catch(const std::exception& e) {
+                    values.push_back(std::stod(value));
+                } catch(const std::exception& e) {
                     ROS_WARN("Invalid value in CSV: %s", value.c_str());
                     continue;
                 }
@@ -59,56 +54,51 @@ public:
                 goal.header.frame_id = "map";
                 goal.pose.position.x = values[0];
                 goal.pose.position.y = values[1];
-                
+
                 tf2::Quaternion q;
                 q.setRPY(0, 0, values[2]);
                 goal.pose.orientation = tf2::toMsg(q);
-                
+
                 goals_.push_back(goal);
             }
         }
-        
         ROS_INFO("Loaded %lu goals from CSV", goals_.size());
     }
 
     void sendGoals() {
-        for(auto& goal : goals_) {
+        for(size_t i = 0; i < goals_.size(); ++i) {
             if(!ros::ok()) return;
 
             move_base_msgs::MoveBaseGoal mb_goal;
-            mb_goal.target_pose = goal;
-            
-            ROS_INFO("Sending goal: x=%.2f, y=%.2f, θ=%.2f", 
-                    goal.pose.position.x, 
-                    goal.pose.position.y,
-                    tf2::getYaw(goal.pose.orientation));
-            
+            mb_goal.target_pose = goals_[i];
+            mb_goal.target_pose.header.stamp = ros::Time::now();
+
+            ROS_INFO("Sending goal %lu: x=%.2f, y=%.2f, theta=%.2f",
+                     i+1,
+                     mb_goal.target_pose.pose.position.x,
+                     mb_goal.target_pose.pose.position.y,
+                     tf2::getYaw(mb_goal.target_pose.pose.orientation));
+
             ac_.sendGoal(mb_goal);
-            
-            // Wait for goal completion
+
+            // Wait for result (SUCCEEDED or ABORTED)
             ac_.waitForResult();
-            
-            if(ac_.getState() == actionlib::SimpleClientGoalState::SUCCEEDED) {
-                ROS_INFO("Goal achieved!");
+            actionlib::SimpleClientGoalState state = ac_.getState();
+
+            if(state == actionlib::SimpleClientGoalState::SUCCEEDED) {
+                ROS_INFO("Goal %lu reached!", i+1);
+            } else {
+                ROS_WARN("Goal %lu not reached: %s", i+1, state.toString().c_str());
             }
-            else {
-                ROS_WARN("Failed to achieve goal: %s", ac_.getState().toString().c_str());
-            }
-            
-            // Add delay between goals if needed
-            ros::Duration(1.0).sleep();
+            ros::Duration(1.0).sleep(); // Optional pause between goals
         }
     }
 };
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "goal_publisher");
-    
-    std::string csv_path = "second_project/csv/goals.csv";   //ros::package::getPath("second_project") + "/csv/goals.csv";
-    GoalPublisher publisher(csv_path);
-    
+    GoalPublisher publisher;
     publisher.sendGoals();
-    
-    ROS_INFO("Finished all goals");
+    ROS_INFO("All goals processed.");
     return 0;
 }
