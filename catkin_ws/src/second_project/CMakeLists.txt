@@ -15,6 +15,8 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   tf2
   tf2_ros
+  geometry_msgs
+  move_base_msgs 
   # dynamic_reconfigure
 
   std_msgs
@@ -62,6 +64,12 @@ target_link_libraries(laser_merge
   ${catkin_LIBRARIES}
 )
 
+add_executable(goals_server src/goals_server.cpp)
+
+#link the execuatables with the required libraries
+target_link_libraries(goals_server
+  ${catkin_LIBRARIES}
+)
 # add_executable(gps_odometer src/gps_pub_sub.cpp)
 # add_dependencies(gps_odometer ${PROJECT_NAME}_gencfg)
 

@@ -1,8 +1,8 @@
 #goal definition, goal message is an [x,y] position
-int32 order 
+geometry_msgs/PointStamped target_pose
 ---
 #result definition 
-int32[] sequence
+std_msgs/Bool success 
 ---
 #feedback 
-int32[] sequence
+geometry_msgs/PointStamped current_pose 
