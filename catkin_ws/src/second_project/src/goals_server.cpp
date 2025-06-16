@@ -3,6 +3,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <ros/package.h>
 #include <actionlib/client/simple_action_client.h>
 #include <move_base_msgs/MoveBaseAction.h>
 #include <geometry_msgs/PoseStamped.h>
@@ -12,14 +13,14 @@
 
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
-class GoalPublisher {
+class GoalsServer {
 private:
     std::vector<geometry_msgs::PoseStamped> goals_;
     MoveBaseClient ac_;
     ros::NodeHandle nh_;
 
 public:
-    GoalPublisher() : ac_("move_base", true) {
+    GoalsServer() : ac_("move_base", true) {
         // Wait for the action server to come up
         while(!ac_.waitForServer(ros::Duration(5.0)) && ros::ok()) {
             ROS_INFO("Waiting for move_base action server...");
@@ -28,7 +29,13 @@ public:
     }
 
     void loadGoalsFromCSV() {
-        std::string csv_path = "$(find second_project)/csv/goals.csv"; // RELATIVE PATH
+        std::string package_path = ros::package::getPath("second_project");
+        if(package_path.empty()) {
+            ROS_ERROR("Failed to get package path for 'second_project'");
+            return;
+        }
+        std::string csv_path = package_path + "/csv/goals.csv"; // ABSOLUTE PATH
+        //std::string csv_path = "catkin_ws/src/second_project/csv/goals.csv"; // RELATIVE PATH
         std::ifstream file(csv_path.c_str());
         if(!file.is_open()) {
             ROS_ERROR("Failed to open CSV file: %s", csv_path.c_str());
@@ -97,8 +104,8 @@ public:
 };
 
 int main(int argc, char** argv) {
-    ros::init(argc, argv, "goal_publisher");
-    GoalPublisher publisher;
+    ros::init(argc, argv, "goals_server");
+    GoalsServer publisher;
     publisher.sendGoals();
     ROS_INFO("All goals processed.");
     return 0;

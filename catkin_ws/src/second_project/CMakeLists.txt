@@ -16,8 +16,10 @@ find_package(catkin REQUIRED COMPONENTS
   tf2
   tf2_ros
   actionlib
+  roslib
   geometry_msgs
   move_base_msgs 
+  rospack
   # dynamic_reconfigure
 
   std_msgs
@@ -39,11 +41,11 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 # Declare the catkin package
-catkin_package(
-  #INCLUDE_DIRS include
-  #LIBRARIES first_project
-  #CATKIN_DEPENDS message_runtime 
-)
+# catkin_package(
+#   #INCLUDE_DIRS include
+#   #LIBRARIES first_project
+#   CATKIN_DEPENDS roscpp rospack nav_msgs sensor_msgs tf2 tf2_ros actionlib geometry_msgs move_base_msgs std_msgs roslib
+# )
 
 # Include directories
 include_directories(include ${catkin_INCLUDE_DIRS}
