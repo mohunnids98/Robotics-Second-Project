@@ -105,8 +105,8 @@ public:
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "goals_server");
-    GoalsServer publisher;
-    publisher.sendGoals();
+    GoalsServer goals_server;
+    goals_server.sendGoals();
     ROS_INFO("All goals processed.");
     return 0;
 }

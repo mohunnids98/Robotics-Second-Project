@@ -73,29 +73,4 @@ add_executable(goals_server src/goals_server.cpp)
 target_link_libraries(goals_server
   ${catkin_LIBRARIES}
 )
-# add_executable(gps_odometer src/gps_pub_sub.cpp)
-# add_dependencies(gps_odometer ${PROJECT_NAME}_gencfg)
 
-# target_link_libraries(gps_odometer
-#   ${catkin_LIBRARIES}
-# )
-
-# add_executable(sector_time src/sector_time_pub_sub.cpp)
-# add_dependencies(sector_time custom_messages_generate_messages_cpp)
-# target_link_libraries(sector_time 
-#   ${catkin_LIBRARIES}
-# )
-
-# add_executable(EKF src/EKF_pub_sub.cpp src/Kalman_filter.cpp)
-
-# #Link the executables with the required libraries
-# target_link_libraries(EKF
-#  ${catkin_LIBRARIES}
-# )
-# # Install the executables
-# #install(TARGETS
-# #  odometer
-# #  gps_odometer
-# #  sector_time
-# #  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# #)
