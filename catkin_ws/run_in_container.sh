@@ -27,7 +27,7 @@ sleep 2
 
 ## Start the map server 
 
-rosrun  map_server map_saver -f maps/my_map
+rosrun  map_server map_saver -f src/second_project/maps/map2
 
 echo "Started Map Server..."
 
