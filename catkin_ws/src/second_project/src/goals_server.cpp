@@ -8,6 +8,7 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <tf2/utils.h>
 
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 

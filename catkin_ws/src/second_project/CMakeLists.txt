@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   tf2
   tf2_ros
+  actionlib
   geometry_msgs
   move_base_msgs 
   # dynamic_reconfigure
