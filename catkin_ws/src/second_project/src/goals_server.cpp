@@ -28,7 +28,7 @@ public:
     }
 
     void loadGoalsFromCSV() {
-        std::string csv_path = "second_project/csv/goals.csv"; // RELATIVE PATH
+        std::string csv_path = "$(find second_project)/csv/goals.csv"; // RELATIVE PATH
         std::ifstream file(csv_path.c_str());
         if(!file.is_open()) {
             ROS_ERROR("Failed to open CSV file: %s", csv_path.c_str());
