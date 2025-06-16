@@ -22,7 +22,8 @@ sleep 2
 rosbag play --clock ../data/robotics2.bag 
 echo "Playing back project.bag..."
 
-sleep 2
+# Wait a bit so map is built
+sleep 15
 
 
 ## Start the map server 
