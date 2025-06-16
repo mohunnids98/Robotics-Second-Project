@@ -2,91 +2,42 @@
     <!-- Parameters -->
     <param name="use_sim_time" value="true"/>
 
-    <!-- Adjust z to match your node's expected height -->
-    <node pkg="tf" type="static_transform_publisher" name="sick_front_tf"
-      args="0.3 0 -0.115 0 0 0 base_link sick_front 100"/>
-    <node pkg="tf" type="static_transform_publisher" name="sick_back_tf"
-      args="-0.3 0 -0.115 0 0 3.14159 base_link sick_back 100"/>
-    <node pkg="tf" type="static_transform_publisher" name="base_to_body" 
-      args="0 0 0 0 0 0 base_link body_link 100" />
+
+    <node pkg="tf2_ros" type="static_transform_publisher" name="laser_front_tf_pub" args="0.3 0 -0.115 -3.142 0.002 -0.002 base_link laser_front" />
+    <node pkg="tf2_ros" type="static_transform_publisher" name="laser_back_tf_pub" args="-0.3 0 -0.115 -3.142 0.002 3.142 base_link laser_back" /> 
+    <node pkg="tf2_ros" type="static_transform_publisher" name="base_to_body" args="0 0 0 0 0 0 base_link body_link" />  
 
 
     <!-- IRA Laser Scan Merger -->
     <node name="laser_merger" pkg="ira_laser_tools" type="laserscan_multi_merger" output="screen">
       <param name="destination_frame" value="base_link"/>
+      <param name="cloud_destination_topic" value="/merged_cloud"/>
       <param name="scan_destination_topic" value="/merged_scan"/>
+	    <param name="angle_min" value="-3.141592653589793238462643383279"/>
+	    <param name="angle_max" value="3.141592653589793238462643383279"/>
+	    <param name="angle_increment" value="0.005058925368"/>
+      <param name="scan_time" value="0.0333333"/>
+	    <param name="range_min" value="0.0"/>
+	    <param name="range_max" value="100.0"/>
+      <!-- <param name="angle_min" value="-3.14159"/>
+      <param name="angle_max" value="3.14159"/> -->
+      <!-- <param name="angle_max" value= "3.13577"/> -->
+      <!-- <param name="angle_increment" value="0.005817764173314431"/> -->
       <param name="laserscan_topics" value="/filtered_front_scan /filtered_back_scan" />
     </node>
 
-    <!-- <node name="map_saver" pkg="map_server" type="map_saver" args="-f maps/my_map" /> --> 
-    
-    <!-- GMapping Node
-    <node  pkg="gmapping" type="slam_gmapping" name="gmapping" output="screen">
-        <param name="base_frame" value="base_link"/>
-        <param name="odom_frame" value="odom"/>
-        <param name="map_frame" value="map"/>
-        <param name="maxUrange" value="10.0"/>
-        <param name="maxRange" value="10.0"/>
-        <param name="linearUpdate" value="0.1"/>
-        <param name="angularUpdate" value="0.436"/>
-        <param name="temporalUpdate" value=".20"/>
-        <param name="map_update_interval" value="5.0"/>
-        <param name="minimumScore" value="200" />
-        <param name="resampleThreshold" value="0.5" />
-        <param name="delta" value="0.1"/>
-        <remap from="scan" to="merged_scan"/>
-    </node> -->
 
-    <arg name="scan_topic"  default="merged_scan" />
-    <arg name="base_frame"  default="base_link"/>
-    <arg name="odom_frame"  default="odom"/>  
-
-    <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
-        <param name="base_frame" value="$(arg base_frame)"/>
-        <param name="odom_frame" value="$(arg odom_frame)"/>
-        <param name="odom_covariance_diagonal" value="[0.1, 0.1, 1000000.0, 1000000.0, 1000000.0, 0.1]"/>
-        <param name="map_update_interval" value="5.0"/>
-        <param name="maxUrange" value="6.0"/>
-        <param name="maxRange" value="8.0"/>
-        <param name="sigma" value="0.05"/>
-        <param name="kernelSize" value="1"/>
-        <param name="lstep" value="0.05"/>
-        <param name="astep" value="0.05"/>
-        <param name="iterations" value="5"/>
-        <param name="lsigma" value="0.075"/>
-        <param name="ogain" value="3.0"/>
-        <param name="lskip" value="0"/>
-        <param name="minimumScore" value="200"/>
-        <param name="srr" value="0.1"/>
-        <param name="srt" value="0.2"/>
-        <param name="str" value="0.1"/>
-        <param name="stt" value="0.2"/>
-        <param name="linearUpdate" value="0.2"/>
-        <param name="angularUpdate" value="0.05"/>
-        <param name="temporalUpdate" value="0.5"/>
-        <param name="resampleThreshold" value="0.5"/>
-        <param name="particles" value="30"/>
-
-        <param name="xmin" value="-10.0"/>
-        <param name="ymin" value="-10.0"/>
-        <param name="xmax" value="10.0"/>
-        <param name="ymax" value="10.0"/>
-
-        <param name="delta" value="0.05"/>
-        <param name="llsamplerange" value="0.01"/>
-        <param name="llsamplestep" value="0.01"/>
-        <param name="lasamplerange" value="0.005"/>
-        <param name="lasamplestep" value="0.005"/>
-        <remap from="scan" to="$(arg scan_topic)"/>
+    <!-- slam_toolbox (async mode for online mapping) -->
+    <node pkg="slam_toolbox" type="async_slam_toolbox_node" name="slam_toolbox" output="screen">
+      <rosparam command="load" file="$(find second_project)/config/slam_toolbox_params.yaml" />
+      <!-- <param name="debug_logging" value="true"/>   -->
+      <param name="scan_topic" value="/merged_scan"/>  <!-- Use the merged scan topic -->
+      <param name="odom_frame" value="odom"/>  <!-- Your odometry frame -->
+      <param name="base_frame" value="base_link"/>  <!-- Your base frame -->
+      <param name="map_frame" value="map"/>  <!-- Your map frame -->
+      <!-- <remap from="scan" to="/merged_scan"/> 
+      <remap from="odom" to="/odom" />  Your odometry topic -->
     </node>
-    <!-- <include file="$(find slam_toolbox)/launch/online_async_launch.xml">
-      <arg name="slam_params_file" value="$find second_project/cfg/slam_toolbox_params.yaml"/>
-    </include> -->
-    <!-- <include file="$(find cartographer_ros)/launch/demo_backpack_2d.launch">
-      <arg name="configuration_directory" value="$(find second_project)/config" />
-      <arg name="configuration_basename" value="cartographer_params.lua" />
-      <remap from="scan" to="merged_scan"/>
-    </include> -->
 
 
     <!-- Custom Nodes -->
@@ -94,5 +45,5 @@
     <node pkg="second_project" type="laser_merge" name="laser_merge" output="screen"/>
 
     <!-- RViz -->
-    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find second_project)/rviz/robot_navigation.rviz"/>
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find second_project)/rviz/robot_mapping.rviz"/> 
 </launch>

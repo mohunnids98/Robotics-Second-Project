@@ -56,7 +56,7 @@ target_link_libraries(odom_to_tf
  ${catkin_LIBRARIES}
 )
 
-add_executable(laser_merge src/laser_merge4.cpp)
+add_executable(laser_merge src/laser_merge.cpp)
 
 #link the execuatables with the required libraries
 target_link_libraries(laser_merge

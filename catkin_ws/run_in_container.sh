@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # # Optional: launch your odometry node or other necessary nodes
-roslaunch second_project mapping2.launch &
+roslaunch second_project mapping.launch &
 echo "Launching second_project..."
 
 # # Give everything a moment to spin up
@@ -27,7 +27,7 @@ sleep 2
 
 ## Start the map server 
 
-rosrun  map_server map_saver -f src/second_project/maps/map2
+rosrun  map_server map_saver -f src/second_project/maps/map
 
 echo "Started Map Server..."
 
