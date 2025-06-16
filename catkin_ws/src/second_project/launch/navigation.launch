@@ -1,17 +1,12 @@
-
 <launch>
-
-  <!-- Launch goals server node -->
-  
-  <node pkg="second_project" type="goals_server" name="goals_server" output="screen"/>
   <arg name="base"       default="burger"/>  <!-- create_circles_asus_xtion_pro create_circles_kinect kobuki_hexagons_astra kobuki_hexagons_asus_xtion_pro kobuki_hexagons_asus_xtion_pro 
 kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba_circles_kinect -->
 
   <!-- Name of the map to use and initial position -->
   <arg name="map_file"       default="$(find second_project)/maps/my_map.yaml"/> 
   <arg name="world_file"     default="$(find second_project)/maps/stage/map.world"/>
-  <arg name="initial_pose_x" default="2.0"/>
-  <arg name="initial_pose_y" default="2.0"/>
+  <arg name="initial_pose_x" default="0.0"/>
+  <arg name="initial_pose_y" default="0.0"/>
   <arg name="initial_pose_a" default="0.0"/>
 
   <arg name="odom_frame_id"   default="odom"/>
@@ -71,6 +66,9 @@ kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba
     <arg name="initial_pose_y" value="$(arg initial_pose_y)"/>
     <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>
   </include>
+
+  <!-- Launch goals server node -->
+  <node pkg="second_project" type="goals_server" name="goals_server" output="screen"/>
 
 
   <!--  **************** Visualisation ****************  -->

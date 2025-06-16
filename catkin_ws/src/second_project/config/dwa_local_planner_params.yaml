@@ -15,9 +15,9 @@ DWAPlannerROS:
   #   do not set min_vel_trans  to 0.0 otherwise dwa will always think translational velocities
   #   are non-negligible and small in place rotational velocities will be created.
 
-  max_rot_vel: 3.0  # choose slightly less than the base's capability
-  min_rot_vel: 0.4  # this is the min angular velocity when there is negligible translational velocity
-  rot_stopped_vel: 0.4
+  max_vel_theta: 3.0  # choose slightly less than the base's capability
+  min_vel_theta: 0.4  # this is the min angular velocity when there is negligible translational velocity
+  theta_stopped_vel: 0.4
   
   acc_lim_x: 0.5 # maximum is theoretically 2.0, but we don't want to crash/do strange stuff/overshoot
   acc_lim_theta: 1.0 #rad

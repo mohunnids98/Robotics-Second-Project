@@ -21,7 +21,6 @@ find_package(catkin REQUIRED COMPONENTS
   move_base_msgs 
   rospack
   # dynamic_reconfigure
-
   std_msgs
 )
 
@@ -40,12 +39,9 @@ find_package(catkin REQUIRED COMPONENTS
 #   config/odometer_params.cfg
 # )
 
-# Declare the catkin package
-# catkin_package(
-#   #INCLUDE_DIRS include
-#   #LIBRARIES first_project
-#   CATKIN_DEPENDS roscpp rospack nav_msgs sensor_msgs tf2 tf2_ros actionlib geometry_msgs move_base_msgs std_msgs roslib
-# )
+catkin_package(
+  CATKIN_DEPENDS roscpp rospack nav_msgs sensor_msgs tf2 tf2_ros actionlib geometry_msgs move_base_msgs std_msgs roslib
+)
 
 # Include directories
 include_directories(include ${catkin_INCLUDE_DIRS}
@@ -73,4 +69,6 @@ add_executable(goals_server src/goals_server.cpp)
 target_link_libraries(goals_server
   ${catkin_LIBRARIES}
 )
+
+#add_dependencies(goals_server ${${PROJECT_NAME}_EXPORTED_TARGETS})
 

@@ -13,7 +13,7 @@ define kinect ranger
 
 define turtlebot position
 (
-  pose [ 15.0 12.0 0.0 0.0 ] 
+  pose [ 0.0 0.0 0.0 0.0 ] 
 
   odom_error [0.01 0.01 0.01 0.01 0.01 0.01]
 
