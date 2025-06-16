@@ -1,5 +1,8 @@
 
 <launch>
+
+  <!-- Launch goals server node -->
+  <node name="goals_server" pkg="second_project" type="goals_server2" output="screen"/>
   <arg name="base"       default="burger"/>  <!-- create_circles_asus_xtion_pro create_circles_kinect kobuki_hexagons_astra kobuki_hexagons_asus_xtion_pro kobuki_hexagons_asus_xtion_pro 
 kobuki_hexagons_kinect kobuki_hexagons_r200 roomba_circles_asus_xtion_pro roomba_circles_kinect -->
 
