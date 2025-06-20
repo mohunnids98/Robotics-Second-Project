@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
     back_tf.header.stamp = ros::Time::now();
     back_tf.header.frame_id = "base_link";
     back_tf.child_frame_id = "laser_back";
-    back_tf.transform.translation.x = -0.3;
+    back_tf.transform.translation.x = -0.231;
     back_tf.transform.translation.y = 0.0;
     back_tf.transform.translation.z = -0.115;
 
