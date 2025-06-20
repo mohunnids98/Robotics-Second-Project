@@ -54,7 +54,7 @@ public:
         front_tf.transform.translation.y = 0.0;
         front_tf.transform.translation.z = -0.115;
         
-        q_front.setRPY(-3.142, 0.002, -0.002); // Adjust the roll, pitch, yaw as needed
+        q_front.setRPY(-3.142, 0.000, 0.000); // Adjust the roll, pitch, yaw as needed
         front_tf.transform.rotation.x = q_front.x();
         front_tf.transform.rotation.y = q_front.y();
         front_tf.transform.rotation.z = q_front.z();
@@ -87,11 +87,11 @@ public:
         back_tf.header.stamp = msg->header.stamp;
         back_tf.header.frame_id = "base_link";
         back_tf.child_frame_id = "laser_back";
-        back_tf.transform.translation.x = -0.230;
+        back_tf.transform.translation.x = -0.231;
         back_tf.transform.translation.y = 0.0;
         back_tf.transform.translation.z = -0.115;
         
-        q_back.setRPY(-3.142, 0.002, 3.142); // Adjust the roll, pitch, yaw as needed
+        q_back.setRPY(-3.142, 0.000, 3.142); // Adjust the roll, pitch, yaw as needed
         back_tf.transform.rotation.x = q_back.x();
         back_tf.transform.rotation.y = q_back.y();
         back_tf.transform.rotation.z = q_back.z();
