@@ -87,7 +87,7 @@ public:
         back_tf.header.stamp = msg->header.stamp;
         back_tf.header.frame_id = "base_link";
         back_tf.child_frame_id = "laser_back";
-        back_tf.transform.translation.x = -0.300;
+        back_tf.transform.translation.x = -0.230;
         back_tf.transform.translation.y = 0.0;
         back_tf.transform.translation.z = -0.115;
         
