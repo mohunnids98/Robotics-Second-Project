@@ -31,7 +31,7 @@ floorplan
 (
   name "map"
   bitmap "../map.png"
-  size [ 31.9 20.7 2.0 ]
+  size [ 27 18 2.0 ]
   pose [  0.0  0.0 0.0 -90.0 ]
 )
 
