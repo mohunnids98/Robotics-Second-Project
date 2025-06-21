@@ -90,7 +90,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.009999999776482582
       Style: Squares
-      Topic: /scan
+      Topic: /merged_scan
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
